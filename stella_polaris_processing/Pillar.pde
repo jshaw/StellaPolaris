@@ -31,6 +31,17 @@ class Pillar{
       translate(50, -250, 50);
       println(person.personPosition.x);
       println(person.personPosition.z);
+      float dist = pillarPosition.dist(person.personPosition);
+      
+      pushMatrix();
+        //fill(220, 1);
+        noFill();
+        translate(-50, 0, -50);
+        translate(pillarPosition.x, pillarPosition.y, pillarPosition.z);
+        rotateX(PI/2);
+        drawProximityCircle(dist, imgWidth * 3, 550);
+      popMatrix();
+      
       //text("Where this at?", pillarPosition.x, pillarPosition.y, pillarPosition.z);
       text("Distance to Person: \n" + pillarPosition.dist(person.personPosition), pillarPosition.x, pillarPosition.y, pillarPosition.z);
     popMatrix();
@@ -45,6 +56,22 @@ class Pillar{
       drawCylinder(tubeRes, imgWidth * 3, imgHeight * 3);
     popMatrix();
     fill(255);
+  
+  }
+  
+  void drawProximityCircle(float _dist, float sides, float h){
+    float angle = 360.0 / (float)sides;
+    float halfHeight = h / 2;
+    
+    float r = _dist - 140;
+    // draw proximity between person and pillar  
+    beginShape();
+    for (int i = 0; i <= sides; i++) {
+      float x = cos( radians( i * angle ) ) * r;
+      float y = sin( radians( i * angle ) ) * r;
+      vertex( x, y, -halfHeight);
+    }
+    endShape(CLOSE);
   
   }
    
