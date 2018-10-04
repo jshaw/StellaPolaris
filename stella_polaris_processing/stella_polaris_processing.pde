@@ -25,6 +25,9 @@ boolean personMoveRight = false;
 boolean personMoveForward = false;
 boolean personMoveBackward = false;
 
+float rotx = PI/4;
+float roty = PI/4;
+
 void settings() {
    size(1080, 720, P3D);
 
@@ -65,11 +68,34 @@ void draw() {
     personPosition.z += personPositionMoveValue;
   }
   
+
+  // if (show3d) {
+  //   noStroke();
+  //   rotateX(rotx);
+  //   rotateY(roty);
+
+  //   pushMatrix();
+  //   // 32, 10 * 3, 160 * 3
+  //   drawCylinder(tubeRes, imgWidth * 3, imgHeight * 3);
+  //   popMatrix();
+  // }
+  
   person.update(personPosition);
   person.draw();
-  
+
   world.update();
   world.draw();
+
+  cam.beginHUD();
+    // now draw things that you want relative to the camera's position and orientation
+  cam.endHUD();
+
+    
+    
+
+  
+
+  
 }
 
 void keyPressed(){
@@ -105,6 +131,12 @@ void keyReleased(){
       personMoveBackward = false;
     }
   }
+}
+
+void mouseDragged() {
+  float rate = 0.01;
+  rotx += (pmouseY-mouseY) * rate;
+  roty += (mouseX-pmouseX) * rate;
 }
 
 

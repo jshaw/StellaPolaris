@@ -4,13 +4,25 @@ class Pillar{
 
   PVector pillarPosition = new PVector();
   int pillarHeight;
+  PGraphics fbo;
+  int index;
   
-  Pillar(Person _person, PVector _pillarPosition, int _pillarHeight){ 
+  int tubeRes = 32;
+  int imgWidth = 8;
+  int imgHeight = 120;
+  //int imgWidth = 12;
+  //int imgHeight = 180;
+  
+  
+  Pillar(int _i, Person _person, PVector _pillarPosition, int _pillarHeight){ 
+    index = _i;
     person = _person;
     pillarPosition = _pillarPosition;
     pillarHeight = _pillarHeight;
     
     textSize(28);
+    
+    fbo = createGraphics(imgWidth, imgHeight);
     
   }
     
@@ -18,23 +30,20 @@ class Pillar{
     pillarPosition = _pillarPosition;
   }
   
-  int tubeRes = 32;
-  //int imgWidth = 8;
-  //int imgHeight = 120;
-  int imgWidth = 12;
-  int imgHeight = 180;
+
+  float r;
+  float f_color;
   
   void draw(){
     
     pushMatrix();
       fill(0);
       translate(50, -250, 50);
-      println(person.personPosition.x);
-      println(person.personPosition.z);
+      // println(person.personPosition.x);
+      // println(person.personPosition.z);
       float dist = pillarPosition.dist(person.personPosition);
       
       pushMatrix();
-        //fill(220, 1);
         noFill();
         translate(-50, 0, -50);
         translate(pillarPosition.x, pillarPosition.y, pillarPosition.z);
@@ -42,7 +51,6 @@ class Pillar{
         drawProximityCircle(dist, imgWidth * 3, 550);
       popMatrix();
       
-      //text("Where this at?", pillarPosition.x, pillarPosition.y, pillarPosition.z);
       text("Distance to Person: \n" + pillarPosition.dist(person.personPosition), pillarPosition.x, pillarPosition.y, pillarPosition.z);
     popMatrix();
     
@@ -53,9 +61,28 @@ class Pillar{
       fill(220, 20);
       //box(100, pillarHeight, 20);
       //drawCylinder();
+      noStroke();
       drawCylinder(tubeRes, imgWidth * 3, imgHeight * 3);
+      stroke(0);
+      strokeWeight(1);
     popMatrix();
     fill(255);
+    
+    int y = 20 + (index * 30);
+
+    fbo.beginDraw();
+      fbo.colorMode(RGB);
+
+      fbo.background(0, 0, 0, 255);
+      pushMatrix();
+        f_color = map((int)dist, 180, 1500, 0, 255);
+        fbo.background(255, (int)f_color, 0, 255);
+      popMatrix();
+    fbo.endDraw();
+
+    cam.beginHUD();
+      image(fbo, 20 + index * (imgWidth * 3 ) , 20, imgWidth * 2, imgHeight * 2);
+    cam.endHUD();
   
   }
   
@@ -63,7 +90,7 @@ class Pillar{
     float angle = 360.0 / (float)sides;
     float halfHeight = h / 2;
     
-    float r = _dist - 140;
+    r = _dist - 140;
     // draw proximity between person and pillar  
     beginShape();
     for (int i = 0; i <= sides; i++) {
@@ -78,6 +105,7 @@ class Pillar{
   void drawCylinder( int sides, float r, float h) {
     float angle = 360.0 / (float)sides;
     float halfHeight = h / 2;
+
   
     // draw top + bottom of the tube
     drawEnds(halfHeight, angle, sides, r, h);
@@ -88,7 +116,7 @@ class Pillar{
     // Texture the cylinder
     // Use img for debugging image mapping w/ a static image 
     // texture(img);
-    //texture(fbo);
+    texture(fbo);
   
     for (int i = 0; i < sides + 1; i++) {
       float x = cos( radians( i * angle ) ) * r;

@@ -20,7 +20,7 @@ class World{
     int i;
     for (i = 0; i < num_pillars; i++) {
       println("i: " + i);
-      pillar[i] = new Pillar(person, pillar_config[i], 180);
+      pillar[i] = new Pillar(i, person, pillar_config[i], 180);
     }
 
   }

@@ -22,6 +22,8 @@ class Person{
     pushMatrix();
       translate(personPosition.x, 0, personPosition.z); 
       fill(220, 20);
+      stroke(0);
+      strokeWeight(1);
       box(100, personHeight, 20);
     popMatrix();
     fill(255);
