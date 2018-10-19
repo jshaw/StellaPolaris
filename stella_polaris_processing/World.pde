@@ -19,7 +19,7 @@ class World{
   
     int i;
     for (i = 0; i < num_pillars; i++) {
-      println("i: " + i);
+      // println("i: " + i);
       pillar[i] = new Pillar(i, person, pillar_config[i], 180);
     }
 
@@ -27,7 +27,7 @@ class World{
     
   void update(){
     
-    println();
+    // println();
   
   }
   
@@ -35,7 +35,7 @@ class World{
     
     int i;
     for (i = 0; i < num_pillars; i++) {
-      println("i: " + i);
+      // println("i: " + i);
       pillar[i].draw();
     }  
   }

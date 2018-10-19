@@ -1,5 +1,10 @@
 import codeanticode.syphon.*;
 import controlP5.*;
+import websockets.*;
+
+OPC opc;
+WebsocketClient wsc;
+int now;
 
 import peasy.*;
 PeasyCam cam;
@@ -28,6 +33,8 @@ boolean personMoveBackward = false;
 float rotx = PI/4;
 float roty = PI/4;
 
+float person_position = 0;
+
 void settings() {
    size(1080, 720, P3D);
 
@@ -51,6 +58,25 @@ void setup()
   cam.setMinimumDistance(0);
   cam.setMaximumDistance(5000);
 
+  opc = new OPC(this, "127.0.0.1", 7890);
+
+  wsc= new WebsocketClient(this, "ws://localhost:8080/john");
+  
+
+  // opc.ledStrip(index, count, x, y, spacing, angle, reversed)
+  // opc.ledStrip(0, 64, width/2, height/2, width / 70.0, 0, false);
+  // opc.ledStrip(64, 64, width/2, height/2 + 10, width / 70.0, 0, false);
+  // opc.ledStrip(128, 60, width/2, height/2 + 10, width / 70.0, PI/2, false);
+
+  // opc.ledStrip(0, 64, width/2, height/2, width / 70.0, 0, false);
+  // opc.ledStrip(64, 64, width/2, height/2 + 10, width / 70.0, 0, false);
+
+  opc.ledStrip(0, 64, 200, 200, 10, 0, false);
+  opc.ledStrip(64, 64, 200, 200 + 10, 10, 0, false);
+
+  // opc.ledStrip(0, 64, 20, 20, 10, PI/2, false);
+  // opc.ledStrip(64, 64, 25, 25, 10, PI/2, false);
+
   gui();
 }
 
@@ -67,6 +93,8 @@ void draw() {
   } else if(personMoveBackward == true) {
     personPosition.z += personPositionMoveValue;
   }
+
+  personPosition.z = person_position;
   
 
   // if (show3d) {
@@ -90,12 +118,6 @@ void draw() {
     // now draw things that you want relative to the camera's position and orientation
   cam.endHUD();
 
-    
-    
-
-  
-
-  
 }
 
 void keyPressed(){
@@ -139,7 +161,45 @@ void mouseDragged() {
   roty += (mouseX-pmouseX) * rate;
 }
 
-
 void gui(){
 
 }
+
+void webSocketEvent(String msg){
+  println("received message: " + msg);
+  println("received message: " + msg);
+  println("received message: " + float(msg));
+
+  // person_position = map(float(msg), 10.0, -99.0, 0.0, 100.0);
+  person_position = calculateDistance(float(msg));
+
+  // person_position = max(0, min(100.0 * (-55.0 - float(msg)) / (-55.0 + 100.0), 100.0));
+  // person_position = map(person_position, 0 )
+  person_position *= 100;
+
+  println("person_position " + person_position);
+  println("person_position " + person_position);
+  println("person_position " + person_position);
+  println("person_position " + person_position);
+  println("person_position " + person_position);
+}
+
+// https://stackoverflow.com/questions/20416218/understanding-ibeacon-distancing/20434019#20434019
+float calculateDistance(float rssi) {
+  
+  //hard coded power value. Usually ranges between -59 to -65
+  float txPower = -59;
+  
+  if (rssi == 0) {
+    return -1.0; 
+  }
+
+  float ratio = rssi*1.0/txPower;
+  if (ratio < 1.0) {
+    return (float)Math.pow(ratio, 10);
+  } else {
+    double distance = (0.89976)*Math.pow(ratio,7.7095) + 0.111;    
+
+    return (float)distance;
+  }
+} 
