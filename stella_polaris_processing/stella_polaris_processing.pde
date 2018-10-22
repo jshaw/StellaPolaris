@@ -174,7 +174,24 @@ void webSocketEvent(String msg){
     return;
   }
 
-  JSONObject json = parseJSONObject(msg);
+  // JSONObject json = parseJSONObject(msg);
+  JSONArray jsonArray = parseJSONArray(msg);
+  println(jsonArray.size());
+
+  // TODO: 
+  // TODO: 
+  // TODO: 
+  // TODO: 
+  // TODO: Need to work on this
+  for (int i = 0; i < jsonArray.size(); i++) {
+    jsonArray.getJSONObject(i);
+  }
+
+  // JSONObject json = jsonArray[0].getFloat("rssi");
+  JSONObject json = jsonArray.getJSONObject(0);
+  // float json = jsonArray.getJSONObject(0).getFloat("rssi");
+  println("json" + json);
+
   float rssi = json.getFloat("rssi");
 
 
