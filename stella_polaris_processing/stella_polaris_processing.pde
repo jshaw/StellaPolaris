@@ -170,8 +170,16 @@ void webSocketEvent(String msg){
   println("received message: " + msg);
   println("received message: " + float(msg));
 
+  if(msg.length() < 10){
+    return;
+  }
+
+  JSONObject json = parseJSONObject(msg);
+  float rssi = json.getFloat("rssi");
+
+
   // person_position = map(float(msg), 10.0, -99.0, 0.0, 100.0);
-  person_position = calculateDistance(float(msg));
+  person_position = calculateDistance(rssi);
 
   // person_position = max(0, min(100.0 * (-55.0 - float(msg)) / (-55.0 + 100.0), 100.0));
   // person_position = map(person_position, 0 )
