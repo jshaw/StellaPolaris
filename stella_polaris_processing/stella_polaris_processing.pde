@@ -74,20 +74,11 @@ void setup()
 
   wsc= new WebsocketClient(this, "ws://localhost:8080/john");
   
-
   // opc.ledStrip(index, count, x, y, spacing, angle, reversed)
-  // opc.ledStrip(0, 64, width/2, height/2, width / 70.0, 0, false);
-  // opc.ledStrip(64, 64, width/2, height/2 + 10, width / 70.0, 0, false);
-  // opc.ledStrip(128, 60, width/2, height/2 + 10, width / 70.0, PI/2, false);
-
-  // opc.ledStrip(0, 64, width/2, height/2, width / 70.0, 0, false);
-  // opc.ledStrip(64, 64, width/2, height/2 + 10, width / 70.0, 0, false);
-
-  opc.ledStrip(0, 64, 200, 200, 10, 0, false);
-  opc.ledStrip(64, 64, 200, 200 + 10, 10, 0, false);
-
-  // opc.ledStrip(0, 64, 20, 20, 10, PI/2, false);
-  // opc.ledStrip(64, 64, 25, 25, 10, PI/2, false);
+  opc.ledStrip(0, 60, 20, 110, 3, PI/2, false);
+  opc.ledStrip(64, 60, 25, 110, 3, PI/2, false);
+  opc.ledStrip(128, 60, 30, 110, 3, PI/2, false);
+  opc.ledStrip(192, 60, 35, 110, 3, PI/2, false);
 
   gui();
 }
