@@ -2,14 +2,17 @@
 
 class World{
 
-  Person person;
+  // Person person;
+  ArrayList people;
   int num_pillars = 5;
   
   Pillar[] pillar = new Pillar[5];
   PVector[] pillar_config = new PVector[num_pillars];
   
-  World(Person _person){
-    person = _person;
+  // World(Person _person){
+  World(ArrayList _people){
+    // person = _person;
+    people = _people;
     
     pillar_config[0] = new PVector(0, -180, -400);
     pillar_config[1] = new PVector(600, -180, -100);
@@ -20,7 +23,8 @@ class World{
     int i;
     for (i = 0; i < num_pillars; i++) {
       // println("i: " + i);
-      pillar[i] = new Pillar(i, person, pillar_config[i], 180);
+      // pillar[i] = new Pillar(i, person, pillar_config[i], 180);
+      pillar[i] = new Pillar(i, people, pillar_config[i], 180);
     }
 
   }
@@ -35,7 +39,7 @@ class World{
     
     int i;
     for (i = 0; i < num_pillars; i++) {
-      // println("i: " + i);
+      pillar[i].update(people);
       pillar[i].draw();
     }  
   }

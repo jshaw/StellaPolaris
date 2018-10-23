@@ -18,9 +18,12 @@ int _height = 0;
 
 World world;
 
+
+ArrayList<Person> people;
+
 // Person Values
 // ==================
-Person person;
+// Person person;
 float personPositionMoveValue = 5.0;
 PVector personPosition = new PVector(0, 0, 0);
 //float personXPosition = 0.0;
@@ -35,6 +38,11 @@ float roty = PI/4;
 
 float person_position = 0;
 
+
+int lastSeen = 0;
+int clearSeen = 30000;
+
+
 void settings() {
    size(1080, 720, P3D);
 
@@ -46,12 +54,16 @@ void settings() {
 
 void setup()
 {
-  frameRate(30);
+  frameRate(10);
   rectMode(CENTER);
   smooth(8);
   
-  person = new Person(personPosition, 400);
-  world = new World(person);
+
+  people = new ArrayList<Person>();
+
+  // person = new Person(personPosition, 400);
+  // world = new World(person);
+  world = new World(people);
   
   
   cam = new PeasyCam(this, width/2, height/2 + 200, 0, 2000);
@@ -94,7 +106,7 @@ void draw() {
     personPosition.z += personPositionMoveValue;
   }
 
-  personPosition.z = person_position;
+  // personPosition.z = person_position;
   
 
   // if (show3d) {
@@ -108,8 +120,21 @@ void draw() {
   //   popMatrix();
   // }
   
-  person.update(personPosition);
-  person.draw();
+  for (int i = 0; i < people.size(); i++) {
+    Person person = people.get(i);
+    // part.display();
+    // person.update(personPosition);
+    person.draw();
+
+    // println("person.isDead(): " + person.isDead());
+
+    // if (person.isDead()) {
+    //   people.remove(i);
+    // }
+  }
+
+  // person.update(personPosition);
+  // person.draw();
 
   world.update();
   world.draw();
@@ -165,49 +190,176 @@ void gui(){
 
 }
 
+
+
 void webSocketEvent(String msg){
   println("received message: " + msg);
   println("received message: " + msg);
   println("received message: " + float(msg));
 
-  if(msg.length() < 10){
-    return;
-  }
+  lastSeen = millis();
 
-  // JSONObject json = parseJSONObject(msg);
-  JSONArray jsonArray = parseJSONArray(msg);
-  println(jsonArray.size());
+  if(msg.length() > 10){
+    println("msg.length(): " + msg.length());
+    // return;
+  
 
-  // TODO: 
-  // TODO: 
-  // TODO: 
-  // TODO: 
-  // TODO: Need to work on this
-  for (int i = 0; i < jsonArray.size(); i++) {
-    jsonArray.getJSONObject(i);
-  }
+    // if(msg.toString() == "NaN"){
+    //   return;
+    // }
 
-  // JSONObject json = jsonArray[0].getFloat("rssi");
-  JSONObject json = jsonArray.getJSONObject(0);
-  // float json = jsonArray.getJSONObject(0).getFloat("rssi");
-  println("json" + json);
+    // JSONObject json = parseJSONObject(msg);
+    JSONArray jsonArray = parseJSONArray(msg);
+    println(jsonArray.size());
 
-  float rssi = json.getFloat("rssi");
+    // TODO: 
+    // TODO: 
+    // TODO: 
+    // TODO: 
+    // TODO: Need to work on this
+    for (int i = 0; i < jsonArray.size(); i++) {
+      // jsonArray.getJSONObject(i);
+      JSONObject json = jsonArray.getJSONObject(i);
+
+      println("json: ", json);
+
+      float rssi = json.getFloat("rssi");
+      String mfd = json.getString("mfd");
+      boolean active = json.getBoolean("active");
+      String deviceUID = json.getString("deviceUID");
+      int deviceCount = json.getInt("deviceCount");
+  
+
+      println("rssi: " + rssi);
+      println("mfd: " + mfd);
+
+      println("people.size(): " + people.size());
+
+      if(people.size() > 0){
+
+        int foundIndex = getIndexOfPeriferal(deviceCount);
+
+        println("A foundIndex: ", foundIndex);
+        println("A foundIndex: ", foundIndex);
+        println("A foundIndex: ", foundIndex);
+
+        if(foundIndex == -1){
+          people.add(new Person(personPosition, 400, clearSeen, rssi, mfd, active, deviceUID, lastSeen, deviceCount));
+        } else {
+
+          Person tmp_person = people.get(foundIndex);
+
+          float person_position_z = calculateDistance(rssi);
+          person_position_z *= 100;
+
+          tmp_person.personPosition.z = person_position_z;
+          PVector _personPosition = tmp_person.personPosition;
+          
+          tmp_person.updateParams(_personPosition, rssi, mfd, active, deviceUID, deviceCount);
+          tmp_person.updateLastSeen(lastSeen);
+          
+        }
+
+        // for (int p = 0; p < people.size(); p++) {
+        //   println("EXHISTING Person");
+        //   Person person = people.get(i);
+
+        //   float person_position_z = calculateDistance(rssi);
+        //   person_position_z *= 100;
 
 
-  // person_position = map(float(msg), 10.0, -99.0, 0.0, 100.0);
-  person_position = calculateDistance(rssi);
+        //   if(deviceUID == person.deviceUID){
+            
+        //     person.personPosition.z = person_position_z;
+        //     PVector _personPosition = person.personPosition;
 
-  // person_position = max(0, min(100.0 * (-55.0 - float(msg)) / (-55.0 + 100.0), 100.0));
-  // person_position = map(person_position, 0 )
-  person_position *= 100;
+        //     person.updateParams(_personPosition, rssi, mfd, active, deviceUID);
+        //     person.updateLastSeen(lastSeen);
+        //   } else {
+        //     println("New Person");
 
-  println("person_position " + person_position);
-  println("person_position " + person_position);
-  println("person_position " + person_position);
-  println("person_position " + person_position);
-  println("person_position " + person_position);
+        //     people.add(new Person(personPosition, 400, clearSeen, rssi, mfd, active, deviceUID, lastSeen));
+        //   }
+        // }
+
+      } else {
+
+        println("IN PEOPLE SIZE == 0");
+        println("IN PEOPLE SIZE == 0");
+        println("IN PEOPLE SIZE == 0");
+        println("IN PEOPLE SIZE == 0");
+
+        people.add(new Person(personPosition, 400, clearSeen, rssi, mfd, active, deviceUID, lastSeen, deviceCount));
+        // people.add(new Person(personPosition, 400, 10, clearSeen, mfd, active, "deviceUID", lastSeen));
+      }
+
+      println("Get here????????");
+
+
+    }
+
+
+    // worked with single param being passed
+    // ======
+
+    // JSONObject json = jsonArray[0].getFloat("rssi");
+
+    // JSONObject json = jsonArray.getJSONObject(0);
+    // // float json = jsonArray.getJSONObject(0).getFloat("rssi");
+    // println("json" + json);
+
+    // float rssi = json.getFloat("rssi");
+    // String active = json.getString("active");
+    // String mfd = json.getString("mfd");
+    // String deviceUID = json.getString("deviceUID");
+
+
+    // // person_position = map(float(msg), 10.0, -99.0, 0.0, 100.0);
+    // person_position = calculateDistance(rssi);
+
+    // // person_position = max(0, min(100.0 * (-55.0 - float(msg)) / (-55.0 + 100.0), 100.0));
+    // // person_position = map(person_position, 0 )
+    // person_position *= 100;
+
+    // END worked with single param being passed
+    // ======
+
+
+
+
+    println("person_position " + person_position);
+    println("person_position " + person_position);
+    println("person_position " + person_position);
+    println("person_position " + person_position);
+    println("person_position " + person_position);
+
+
+  } // end of message check to make sure that it is longer then 10 characters
+
 }
+
+// https://stackoverflow.com/questions/39175557/using-indexof-with-a-customobject-in-an-arraylist
+// https://stackoverflow.com/questions/42127763/indexof-for-arraylist-of-user-defined-objects-not-working
+
+// int getIndexOfPeriferal(String periferalName) {
+int getIndexOfPeriferal(int periferalName) {
+  for(Person personObject : people)  {
+    println("personObject: ", personObject);
+    println("periferalName: ", periferalName);
+
+    int foundIndex = people.indexOf(personObject);
+    println("foundIndex, " + foundIndex);
+    println("people.get(foundIndex).deviceUID: " + people.get(foundIndex).deviceUID);
+
+    if(int(people.get(foundIndex).deviceUID) == periferalName){
+      println("EVER GET IN THIS IFFFF???");
+      return foundIndex;
+    }
+
+  }
+  return -1; 
+}
+
 
 // https://stackoverflow.com/questions/20416218/understanding-ibeacon-distancing/20434019#20434019
 float calculateDistance(float rssi) {
