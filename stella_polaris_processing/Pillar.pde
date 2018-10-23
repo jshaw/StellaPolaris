@@ -40,6 +40,8 @@ class Pillar{
 
     int peopleSize = people.size();
 
+    globalDist = 0;
+
     for (int p = 0; p < peopleSize; p++) {
       Person person = people.get(p);
 
