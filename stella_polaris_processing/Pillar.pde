@@ -163,6 +163,11 @@ class Pillar{
         // f_color = map((int)dist, 180, 1500, 0, 255);
         f_color = map((int)average_distance, 180, 1500, 0, 255);
         fbo.background(255, (int)f_color, 0, 255);
+
+        fbo.blendMode(ADD);
+        fbo.fill((int)f_color, 255, (int)f_color, 255);
+        fbo.ellipse(5, 5, 5, 5);
+
       popMatrix();
     fbo.endDraw();
 
