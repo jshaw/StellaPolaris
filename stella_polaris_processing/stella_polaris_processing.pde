@@ -71,6 +71,8 @@ void setup()
   rectMode(CENTER);
   smooth(8);
   
+  perspective(PI/3.0,(float)width/height,1,100000);
+
 
   people = new ArrayList<Person>();
 
@@ -167,8 +169,28 @@ void draw() {
   //   popMatrix();
   // }
   
+
+
+  // TODO
+  // TODO
+  // TODO
+  // TODO
+  // TODO
+  // ?? SOMEHING WEIRD HS HAPPENING HERE 
+  // WITH THENUMBER OF POEPLE SHOWING!!
+  // TODO
+  // TODO
+  // TODO
+  // TODO
   for (int i = 0; i < people.size(); i++) {
     Person person = people.get(i);
+    // println("i: " + i);
+
+    // println("person.x: " + person.personPosition.x);
+    // println("person.y: " + person.personPosition.y);
+    // println("person.z: " + person.personPosition.z);
+
+
     // part.display();
     // person.update(personPosition);
     person.draw();
@@ -241,13 +263,13 @@ void gui(){
 
 void webSocketEvent(String msg){
   println("received message: " + msg);
-  println("received message: " + msg);
-  println("received message: " + float(msg));
+  // println("received message: " + msg);
+  // println("received message: " + float(msg));
 
   lastSeen = millis();
 
   if(msg.length() > 10){
-    println("msg.length(): " + msg.length());
+    // println("msg.length(): " + msg.length());
     // return;
   
 
@@ -277,21 +299,24 @@ void webSocketEvent(String msg){
       int deviceCount = json.getInt("deviceCount");
   
 
-      println("rssi: " + rssi);
-      println("mfd: " + mfd);
+      // println("rssi: " + rssi);
+      // println("mfd: " + mfd);
 
-      println("people.size(): " + people.size());
+      // println("people.size(): " + people.size());
 
       if(people.size() > 0){
 
         int foundIndex = getIndexOfPeriferal(deviceCount);
 
-        println("A foundIndex: ", foundIndex);
-        println("A foundIndex: ", foundIndex);
-        println("A foundIndex: ", foundIndex);
+        // println("A foundIndex: ", foundIndex);
+        // println("A foundIndex: ", foundIndex);
+        // println("A foundIndex: ", foundIndex);
+
+        // new PVector(0, 0, 0);
 
         if(foundIndex == -1){
-          people.add(new Person(personPosition, 400, clearSeen, rssi, mfd, active, deviceUID, lastSeen, deviceCount));
+          // people.add(new Person(personPosition, 400, clearSeen, rssi, mfd, active, deviceUID, lastSeen, deviceCount));
+          people.add(new Person(new PVector(0, 0, 0), 400, clearSeen, rssi, mfd, active, deviceUID, lastSeen, deviceCount));
         } else {
 
           Person tmp_person = people.get(foundIndex);
@@ -301,6 +326,11 @@ void webSocketEvent(String msg){
 
           tmp_person.personPosition.z = person_position_z;
           PVector _personPosition = tmp_person.personPosition;
+
+          // println("_personPosition: " + _personPosition);
+          // println("_personPosition: " + _personPosition);
+          // println("_personPosition: " + _personPosition);
+          // println("_personPosition: " + _personPosition);
           
           tmp_person.updateParams(_personPosition, rssi, mfd, active, deviceUID, deviceCount);
           tmp_person.updateLastSeen(lastSeen);
@@ -331,16 +361,20 @@ void webSocketEvent(String msg){
 
       } else {
 
-        println("IN PEOPLE SIZE == 0");
-        println("IN PEOPLE SIZE == 0");
-        println("IN PEOPLE SIZE == 0");
-        println("IN PEOPLE SIZE == 0");
+        // println("IN PEOPLE SIZE == 0");
+        // println("IN PEOPLE SIZE == 0");
+        // println("IN PEOPLE SIZE == 0");
+        // println("IN PEOPLE SIZE == 0");
 
-        people.add(new Person(personPosition, 400, clearSeen, rssi, mfd, active, deviceUID, lastSeen, deviceCount));
+        // people.add(new Person(personPosition, 400, clearSeen, rssi, mfd, active, deviceUID, lastSeen, deviceCount));
         // people.add(new Person(personPosition, 400, 10, clearSeen, mfd, active, "deviceUID", lastSeen));
+
+        people.add(new Person(new PVector(0, 0, 0), 400, clearSeen, rssi, mfd, active, deviceUID, lastSeen, deviceCount));
+
+        
       }
 
-      println("Get here????????");
+      // println("Get here????????");
 
 
     }
@@ -374,11 +408,11 @@ void webSocketEvent(String msg){
 
 
 
-    println("person_position " + person_position);
-    println("person_position " + person_position);
-    println("person_position " + person_position);
-    println("person_position " + person_position);
-    println("person_position " + person_position);
+    // println("person_position " + person_position);
+    // println("person_position " + person_position);
+    // println("person_position " + person_position);
+    // println("person_position " + person_position);
+    // println("person_position " + person_position);
 
 
   } // end of message check to make sure that it is longer then 10 characters
@@ -390,16 +424,21 @@ void webSocketEvent(String msg){
 
 // int getIndexOfPeriferal(String periferalName) {
 int getIndexOfPeriferal(int periferalName) {
+
+  // println("periferalNameperiferalNameperiferalName: " + periferalName);
+
   for(Person personObject : people)  {
-    println("personObject: ", personObject);
-    println("periferalName: ", periferalName);
+    // println("personObject: ", personObject);
+    // println("periferalName: ", periferalName);
 
     int foundIndex = people.indexOf(personObject);
-    println("foundIndex, " + foundIndex);
-    println("people.get(foundIndex).deviceUID: " + people.get(foundIndex).deviceUID);
+    // println("foundIndex, " + foundIndex);
+    // println("people.get(foundIndex).deviceUID: " + people.get(foundIndex).deviceUID);
+    // println("people.get(foundIndex).deviceCount: " + people.get(foundIndex).deviceCount);
 
-    if(int(people.get(foundIndex).deviceUID) == periferalName){
-      println("EVER GET IN THIS IFFFF???");
+    // if(int(people.get(foundIndex).deviceUID) == periferalName){
+      if(int(people.get(foundIndex).deviceCount) == periferalName){
+      // println("EVER GET IN THIS IFFFF???");
       return foundIndex;
     }
 

@@ -82,6 +82,7 @@ class Pillar{
 
 
     int peopleSize = people.size();
+    int data_height = peopleSize * 30;
 
     for (int p = 0; p < peopleSize; p++) {
       Person person = people.get(p);
@@ -114,7 +115,27 @@ class Pillar{
           drawProximityCircle(person.personPillarDist[index], imgWidth * 3, 550);
         popMatrix();
         
-        text("Distance to Person: \n" + pillarPosition.dist(person.personPosition), pillarPosition.x, pillarPosition.y, pillarPosition.z);
+
+        // text("Distance to Person: \n" + pillarPosition.dist(person.personPosition), pillarPosition.x, pillarPosition.y, pillarPosition.z);
+
+        // a float: x-coordinate of the rectangle by default
+        // b float: y-coordinate of the rectangle by default
+        // c float: width of the rectangle by default
+        // d float: height of the rectangle by default
+
+        pushMatrix();
+          translate(pillarPosition.x - 10, pillarPosition.y - 25, pillarPosition.z - 2);
+          fill(255, 255, 255);
+          stroke(0, 0, 0);
+          // rect(pillarPosition.x, pillarPosition.y, 200, 500);
+          rectMode(CORNER);
+
+          rect(0, 0, 350, data_height);
+          // box(100, 200, 1);
+          fill(0, 0, 0);
+          stroke(0, 0, 0);
+        popMatrix();
+        text("Distance:" + pillarPosition.dist(person.personPosition), pillarPosition.x, pillarPosition.y + (p * 25), pillarPosition.z);
       popMatrix();
 
       
