@@ -1,9 +1,22 @@
 import codeanticode.syphon.*;
 import controlP5.*;
-import websockets.*;
+
+// https://github.com/TakahikoKawasaki/nv-websocket-client
+// https://mvnrepository.com/artifact/com.neovisionaries/nv-websocket-client/1.4
+
+import java.io.*;
+import com.neovisionaries.ws.client.*;
+
+import java.util.Map;
+import java.util.List;
 
 OPC opc;
-WebsocketClient wsc;
+// WebSocket wsc;
+WebSocket ws;
+WebSocketFactory factory;
+
+boolean wsConnected = false;
+
 int now;
 
 import peasy.*;
@@ -72,7 +85,8 @@ void setup()
 
   opc = new OPC(this, "127.0.0.1", 7890);
 
-  wsc= new WebsocketClient(this, "ws://localhost:8080/john");
+  // Integrate a better WebSocket library for communication and error handlging
+  openWebSocket("ws://localhost:8080/john");
   
   // opc.ledStrip(index, count, x, y, spacing, angle, reversed)
   opc.ledStrip(0, 60, 20, 110, 3, PI/2, false);
@@ -83,9 +97,51 @@ void setup()
   gui();
 }
 
+// https://github.com/TakahikoKawasaki/nv-websocket-client
+// https://takahikokawasaki.github.io/nv-websocket-client/com/neovisionaries/ws/client/WebSocketListener.html#onConnected-com.neovisionaries.ws.client.WebSocket-java.util.Map-
+// https://mvnrepository.com/artifact/com.neovisionaries/nv-websocket-client/1.4
+
+// REALLY HELPFUL FOR PROCESSING INTEGRATION
+// https://www.programcreek.com/java-api-examples/?api=com.neovisionaries.ws.client.WebSocket
+
+private void openWebSocket(String url) {
+    try {
+        ws = new WebSocketFactory().createSocket(url).addListener(new WebSocketAdapter() {
+            @Override
+            public void onTextMessage(WebSocket websocket, String message) {
+                println("message: ", message);
+
+                webSocketEvent(message);
+            }
+            
+            @Override
+            public void onConnected(WebSocket websocket, Map<String,List<String>> headers) {
+                // Received a text message.
+                println("111111");
+                wsConnected = true;
+            }
+            
+            @Override
+            public void onDisconnected(WebSocket websocket, WebSocketFrame serverCloseFrame, WebSocketFrame clientCloseFrame, boolean closedByServer) {
+                // Received a text message.
+                println("33333333");
+                wsConnected = false;
+            }
+        }).connect();
+    } catch (Exception ignored) {
+      // println("ignored: " + ignored);
+      wsConnected = false;
+    }
+}
+
+
 void draw() {
   background(255);
   translate(width/2,height/2);
+
+  if(wsConnected == false){
+    openWebSocket("ws://localhost:8080/john");
+  }
   
   if(personMoveLeft == true){
     personPosition.x -= personPositionMoveValue;
