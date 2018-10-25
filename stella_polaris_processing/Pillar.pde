@@ -16,6 +16,17 @@ class Pillar{
   float globalDist = 0;
 
   float average_distance = 0;
+
+
+  float inc = 0.005;
+  int density = 10;
+
+  //float inc = 0.005;
+  //int density = 8;
+
+  float znoise = 0.0;
+
+  PImage image;
   
   
   // Pillar(int _i, Person _person, PVector _pillarPosition, int _pillarHeight){ 
@@ -28,6 +39,8 @@ class Pillar{
     textSize(28);
     
     fbo = createGraphics(imgWidth, imgHeight);
+
+    image = loadImage(dataPath("norther_lights_v3_120_verticle_white_v3.png"));
     
   }
     
@@ -177,17 +190,65 @@ class Pillar{
     int y = 20 + (index * 30);
 
     fbo.beginDraw();
+
+
       fbo.colorMode(RGB);
 
       fbo.background(0, 0, 0, 255);
       pushMatrix();
         // f_color = map((int)dist, 180, 1500, 0, 255);
         f_color = map((int)average_distance, 180, 1500, 0, 255);
-        fbo.background(255, (int)f_color, 0, 255);
+        // fbo.background(255, (int)f_color, 0, 255);
 
-        fbo.blendMode(ADD);
-        fbo.fill((int)f_color, 255, (int)f_color, 255);
-        fbo.ellipse(5, 5, 5, 5);
+        // fbo.blendMode(ADD);
+        // fbo.fill((int)f_color, 255, (int)f_color, 255);
+        
+
+        // ORIGINAL BLEND MODE FOR SINGLE COLOR
+        // fbo.fill((int)f_color, 255, (int)f_color, 100);
+
+
+        float xnoise = 0.0;
+        float ynoise = 0.0;
+        int nw = fbo.width;
+        int nh = fbo.height;
+        for (int ny = 0; ny < nw; ny += density) {
+          for (int nx = 0; nx < nh; nx += density) {
+            //float n = noise(xnoise, ynoise, znoise) * 256;
+            // float n = noise(xnoise, ynoise, znoise) * 330;
+            float n = noise(xnoise, ynoise, znoise) * 150;
+            //println("n: " + n);
+            color c = image.get(4, (int)n);
+            //fill(n, 255, 255);
+            //fill(c, 255, 255);
+            fbo.noStroke();
+            fbo.fill(c);
+            fbo.rect(ny, nx, density, density);
+            xnoise += inc;
+          }
+          xnoise = 0;
+          ynoise += inc;
+        }
+        znoise += inc;
+
+
+        float y_pos = map((int)average_distance, 300, 1500, imgWidth, imgHeight);
+
+        println("y_pos:" + y_pos);
+
+        float ellipse_size = map((int)average_distance, 300, 1500, imgWidth, imgWidth * 10);
+
+        println("ellipse_size" + ellipse_size);
+        // println("ellipse_size" + ellipse_size);
+        // println("ellipse_size" + ellipse_size);
+
+        // Parameters  
+        // a float: x-coordinate of the ellipse
+        // b float: y-coordinate of the ellipse
+        // c float: width of the ellipse by default
+        // d float: height of the ellipse by default
+
+        fbo.ellipse(4, y_pos, (int)ellipse_size, (int)ellipse_size);
 
       popMatrix();
     fbo.endDraw();
