@@ -7,6 +7,7 @@ class World{
   
   Pillar[] pillar = new Pillar[5];
   PVector[] pillar_config = new PVector[num_pillars];
+  PImage image = loadImage(dataPath("norther_lights_v3_120_verticle_white_v3.png"));;
   
   World(ArrayList _people){
     people = _people;
@@ -21,7 +22,7 @@ class World{
     for (i = 0; i < num_pillars; i++) {
       // println("i: " + i);
       // pillar[i] = new Pillar(i, person, pillar_config[i], 180);
-      pillar[i] = new Pillar(i, people, pillar_config[i], 180);
+      pillar[i] = new Pillar(i, image, people, pillar_config[i], 180);
     }
 
   }

@@ -18,19 +18,20 @@ class Pillar{
   float average_distance = 0;
 
 
-  float inc = 0.005;
+  float inc = 0.003;
   int density = 10;
 
   //float inc = 0.005;
   //int density = 8;
 
-  float znoise = 0.0;
+  float znoise = random(0,1);
+
 
   PImage image;
   
   
   // Pillar(int _i, Person _person, PVector _pillarPosition, int _pillarHeight){ 
-  Pillar(int _i, ArrayList _people, PVector _pillarPosition, int _pillarHeight){ 
+  Pillar(int _i, PImage _image, ArrayList _people, PVector _pillarPosition, int _pillarHeight){ 
     index = _i;
     people = _people;
     pillarPosition = _pillarPosition;
@@ -40,13 +41,10 @@ class Pillar{
     
     fbo = createGraphics(imgWidth, imgHeight);
 
-    image = loadImage(dataPath("norther_lights_v3_120_verticle_white_v3.png"));
+    image = _image;
     
   }
     
-  // void update(PVector _pillarPosition){
-  //   pillarPosition = _pillarPosition;
-  // }
 
   void update(ArrayList _people){
     people = _people;
@@ -109,7 +107,6 @@ class Pillar{
           translate(-50, 0, -50);
           translate(pillarPosition.x, pillarPosition.y, pillarPosition.z);
           rotateX(PI/2);
-          // drawProximityCircle(dist, imgWidth * 3, 550);
 
           // here, the index is used as the pillar index
           // so each Person has a array to store the distance to 
@@ -117,9 +114,6 @@ class Pillar{
           drawProximityCircle(person.personPillarDist[index], imgWidth * 3, 550);
         popMatrix();
         
-
-        // text("Distance to Person: \n" + pillarPosition.dist(person.personPosition), pillarPosition.x, pillarPosition.y, pillarPosition.z);
-
         // a float: x-coordinate of the rectangle by default
         // b float: y-coordinate of the rectangle by default
         // c float: width of the rectangle by default
