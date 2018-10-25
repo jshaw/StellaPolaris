@@ -2,16 +2,13 @@
 
 class World{
 
-  // Person person;
   ArrayList people;
   int num_pillars = 5;
   
   Pillar[] pillar = new Pillar[5];
   PVector[] pillar_config = new PVector[num_pillars];
   
-  // World(Person _person){
   World(ArrayList _people){
-    // person = _person;
     people = _people;
     
     pillar_config[0] = new PVector(0, -180, -400);

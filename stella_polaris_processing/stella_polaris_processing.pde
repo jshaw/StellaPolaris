@@ -11,7 +11,6 @@ import java.util.Map;
 import java.util.List;
 
 OPC opc;
-// WebSocket wsc;
 WebSocket ws;
 WebSocketFactory factory;
 
@@ -31,12 +30,10 @@ int _height = 0;
 
 World world;
 
-
 ArrayList<Person> people;
 
 // Person Values
 // ==================
-// Person person;
 float personPositionMoveValue = 5.0;
 PVector personPosition = new PVector(0, 0, 0);
 //float personXPosition = 0.0;
@@ -51,10 +48,8 @@ float roty = PI/4;
 
 float person_position = 0;
 
-
 int lastSeen = 0;
 int clearSeen = 30000;
-
 
 void settings() {
    size(1080, 720, P3D);
@@ -73,11 +68,7 @@ void setup()
   
   perspective(PI/3.0,(float)width/height,1,100000);
 
-
   people = new ArrayList<Person>();
-
-  // person = new Person(personPosition, 400);
-  // world = new World(person);
   world = new World(people);
   
   
@@ -112,26 +103,22 @@ private void openWebSocket(String url) {
             @Override
             public void onTextMessage(WebSocket websocket, String message) {
                 println("message: ", message);
-
                 webSocketEvent(message);
             }
             
             @Override
             public void onConnected(WebSocket websocket, Map<String,List<String>> headers) {
                 // Received a text message.
-                println("111111");
                 wsConnected = true;
             }
             
             @Override
             public void onDisconnected(WebSocket websocket, WebSocketFrame serverCloseFrame, WebSocketFrame clientCloseFrame, boolean closedByServer) {
                 // Received a text message.
-                println("33333333");
                 wsConnected = false;
             }
         }).connect();
     } catch (Exception ignored) {
-      // println("ignored: " + ignored);
       wsConnected = false;
     }
 }
@@ -155,19 +142,9 @@ void draw() {
     personPosition.z += personPositionMoveValue;
   }
 
-  // personPosition.z = person_position;
   
-
-  // if (show3d) {
-  //   noStroke();
-  //   rotateX(rotx);
-  //   rotateY(roty);
-
-  //   pushMatrix();
-  //   // 32, 10 * 3, 160 * 3
-  //   drawCylinder(tubeRes, imgWidth * 3, imgHeight * 3);
-  //   popMatrix();
-  // }
+  // This was for controlling a single person and their position
+  // personPosition.z = person_position;
   
 
 
@@ -185,17 +162,7 @@ void draw() {
   for (int i = 0; i < people.size(); i++) {
     Person person = people.get(i);
     // println("i: " + i);
-
-    // println("person.x: " + person.personPosition.x);
-    // println("person.y: " + person.personPosition.y);
-    // println("person.z: " + person.personPosition.z);
-
-
-    // part.display();
-    // person.update(personPosition);
     person.draw();
-
-    // println("person.isDead(): " + person.isDead());
 
     // if (person.isDead()) {
     //   people.remove(i);
@@ -259,25 +226,13 @@ void gui(){
 
 }
 
-
-
 void webSocketEvent(String msg){
   println("received message: " + msg);
-  // println("received message: " + msg);
-  // println("received message: " + float(msg));
 
   lastSeen = millis();
 
   if(msg.length() > 10){
-    // println("msg.length(): " + msg.length());
-    // return;
-  
-
-    // if(msg.toString() == "NaN"){
-    //   return;
-    // }
-
-    // JSONObject json = parseJSONObject(msg);
+    
     JSONArray jsonArray = parseJSONArray(msg);
     println(jsonArray.size());
 
@@ -287,7 +242,6 @@ void webSocketEvent(String msg){
     // TODO: 
     // TODO: Need to work on this
     for (int i = 0; i < jsonArray.size(); i++) {
-      // jsonArray.getJSONObject(i);
       JSONObject json = jsonArray.getJSONObject(i);
 
       println("json: ", json);
@@ -298,24 +252,11 @@ void webSocketEvent(String msg){
       String deviceUID = json.getString("deviceUID");
       int deviceCount = json.getInt("deviceCount");
   
-
-      // println("rssi: " + rssi);
-      // println("mfd: " + mfd);
-
-      // println("people.size(): " + people.size());
-
       if(people.size() > 0){
 
         int foundIndex = getIndexOfPeriferal(deviceCount);
 
-        // println("A foundIndex: ", foundIndex);
-        // println("A foundIndex: ", foundIndex);
-        // println("A foundIndex: ", foundIndex);
-
-        // new PVector(0, 0, 0);
-
         if(foundIndex == -1){
-          // people.add(new Person(personPosition, 400, clearSeen, rssi, mfd, active, deviceUID, lastSeen, deviceCount));
           people.add(new Person(new PVector(0, 0, 0), 400, clearSeen, rssi, mfd, active, deviceUID, lastSeen, deviceCount));
         } else {
 
@@ -327,9 +268,6 @@ void webSocketEvent(String msg){
           tmp_person.personPosition.z = person_position_z;
           PVector _personPosition = tmp_person.personPosition;
 
-          // println("_personPosition: " + _personPosition);
-          // println("_personPosition: " + _personPosition);
-          // println("_personPosition: " + _personPosition);
           // println("_personPosition: " + _personPosition);
           
           tmp_person.updateParams(_personPosition, rssi, mfd, active, deviceUID, deviceCount);
@@ -361,22 +299,9 @@ void webSocketEvent(String msg){
 
       } else {
 
-        // println("IN PEOPLE SIZE == 0");
-        // println("IN PEOPLE SIZE == 0");
-        // println("IN PEOPLE SIZE == 0");
-        // println("IN PEOPLE SIZE == 0");
-
-        // people.add(new Person(personPosition, 400, clearSeen, rssi, mfd, active, deviceUID, lastSeen, deviceCount));
-        // people.add(new Person(personPosition, 400, 10, clearSeen, mfd, active, "deviceUID", lastSeen));
-
         people.add(new Person(new PVector(0, 0, 0), 400, clearSeen, rssi, mfd, active, deviceUID, lastSeen, deviceCount));
 
-        
       }
-
-      // println("Get here????????");
-
-
     }
 
 
@@ -422,23 +347,15 @@ void webSocketEvent(String msg){
 // https://stackoverflow.com/questions/39175557/using-indexof-with-a-customobject-in-an-arraylist
 // https://stackoverflow.com/questions/42127763/indexof-for-arraylist-of-user-defined-objects-not-working
 
-// int getIndexOfPeriferal(String periferalName) {
 int getIndexOfPeriferal(int periferalName) {
-
-  // println("periferalNameperiferalNameperiferalName: " + periferalName);
 
   for(Person personObject : people)  {
     // println("personObject: ", personObject);
     // println("periferalName: ", periferalName);
 
     int foundIndex = people.indexOf(personObject);
-    // println("foundIndex, " + foundIndex);
-    // println("people.get(foundIndex).deviceUID: " + people.get(foundIndex).deviceUID);
-    // println("people.get(foundIndex).deviceCount: " + people.get(foundIndex).deviceCount);
 
-    // if(int(people.get(foundIndex).deviceUID) == periferalName){
       if(int(people.get(foundIndex).deviceCount) == periferalName){
-      // println("EVER GET IN THIS IFFFF???");
       return foundIndex;
     }
 

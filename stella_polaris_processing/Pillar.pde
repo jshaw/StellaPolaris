@@ -100,20 +100,9 @@ class Pillar{
     for (int p = 0; p < peopleSize; p++) {
       Person person = people.get(p);
 
-      // globalDist += pillarPosition.dist(person.personPosition);
-
-      // float dist = pillarPosition.dist(person.personPosition);
-
-      // person.personPillarDist[p] = dist;
-
-      // average_distance = globalDist / peopleSize;
-
       pushMatrix();
         fill(0);
         translate(50, -250, 50);
-        // println(person.personPosition.x);
-        // println(person.personPosition.z);
-        // float dist = pillarPosition.dist(person.personPosition);
         
         pushMatrix();
           noFill();
@@ -196,17 +185,8 @@ class Pillar{
 
       fbo.background(0, 0, 0, 255);
       pushMatrix();
-        // f_color = map((int)dist, 180, 1500, 0, 255);
+
         f_color = map((int)average_distance, 180, 1500, 0, 255);
-        // fbo.background(255, (int)f_color, 0, 255);
-
-        // fbo.blendMode(ADD);
-        // fbo.fill((int)f_color, 255, (int)f_color, 255);
-        
-
-        // ORIGINAL BLEND MODE FOR SINGLE COLOR
-        // fbo.fill((int)f_color, 255, (int)f_color, 100);
-
 
         float xnoise = 0.0;
         float ynoise = 0.0;
@@ -214,13 +194,8 @@ class Pillar{
         int nh = fbo.height;
         for (int ny = 0; ny < nw; ny += density) {
           for (int nx = 0; nx < nh; nx += density) {
-            //float n = noise(xnoise, ynoise, znoise) * 256;
-            // float n = noise(xnoise, ynoise, znoise) * 330;
             float n = noise(xnoise, ynoise, znoise) * 150;
-            //println("n: " + n);
             color c = image.get(4, (int)n);
-            //fill(n, 255, 255);
-            //fill(c, 255, 255);
             fbo.noStroke();
             fbo.fill(c);
             fbo.rect(ny, nx, density, density);
