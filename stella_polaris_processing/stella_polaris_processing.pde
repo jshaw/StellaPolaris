@@ -79,13 +79,13 @@ void setup()
   opc = new OPC(this, "127.0.0.1", 7890);
 
   // Integrate a better WebSocket library for communication and error handlging
-  openWebSocket("ws://localhost:8080/john");
+  openWebSocket("ws://localhost:8080/stella");
   
   // opc.ledStrip(index, count, x, y, spacing, angle, reversed)
-  opc.ledStrip(0, 60, 20, 110, 3, PI/2, false);
-  opc.ledStrip(64, 60, 25, 110, 3, PI/2, false);
-  opc.ledStrip(128, 60, 30, 110, 3, PI/2, false);
-  opc.ledStrip(192, 60, 35, 110, 3, PI/2, false);
+  opc.ledStrip(0, 60, 20, 139, 4, PI/2, false);
+  opc.ledStrip(64, 60, 25, 139, 4, PI/2, false);
+  opc.ledStrip(128, 60, 30, 139, 4, PI/2, false);
+  opc.ledStrip(192, 60, 35, 139, 4, PI/2, false);
 
   gui();
 }
@@ -129,7 +129,7 @@ void draw() {
   translate(width/2,height/2);
 
   if(wsConnected == false){
-    openWebSocket("ws://localhost:8080/john");
+    openWebSocket("ws://localhost:8080/stella");
   }
   
   if(personMoveLeft == true){
