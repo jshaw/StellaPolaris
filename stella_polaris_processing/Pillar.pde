@@ -19,7 +19,7 @@ class Pillar{
 
 
   float inc = 0.003;
-  int density = 10;
+  int density = 8;
 
   //float inc = 0.005;
   //int density = 8;
@@ -28,7 +28,12 @@ class Pillar{
 
 
   PImage image;
-  
+
+  color[] colors = {#330033, #333333, #333366, #66cc99, #663366, #993399, #336666, #003366, #6699cc, #009999};
+
+  int color_index = (int)random(0, colors.length);
+  int alpha = 40;
+  float scale = 0.95;
   
   // Pillar(int _i, Person _person, PVector _pillarPosition, int _pillarHeight){ 
   Pillar(int _i, PImage _image, ArrayList _people, PVector _pillarPosition, int _pillarHeight){ 
@@ -92,50 +97,49 @@ class Pillar{
     
 
 
-    int peopleSize = people.size();
-    int data_height = peopleSize * 30;
+    // int peopleSize = people.size();
+    // int data_height = peopleSize * 30;
 
-    for (int p = 0; p < peopleSize; p++) {
-      Person person = people.get(p);
+    // for (int p = 0; p < peopleSize; p++) {
+    //   Person person = people.get(p);
 
-      pushMatrix();
-        fill(0);
-        translate(50, -250, 50);
+    //   pushMatrix();
+    //     fill(0);
+    //     translate(50, -250, 50);
         
-        pushMatrix();
-          noFill();
-          translate(-50, 0, -50);
-          translate(pillarPosition.x, pillarPosition.y, pillarPosition.z);
-          rotateX(PI/2);
+    //     pushMatrix();
+    //       noFill();
+    //       translate(-50, 0, -50);
+    //       translate(pillarPosition.x, pillarPosition.y, pillarPosition.z);
+    //       rotateX(PI/2);
 
-          // here, the index is used as the pillar index
-          // so each Person has a array to store the distance to 
-          // one of the 5 pillars
-          drawProximityCircle(person.personPillarDist[index], imgWidth * 3, 550);
-        popMatrix();
+    //       // here, the index is used as the pillar index
+    //       // so each Person has a array to store the distance to 
+    //       // one of the 5 pillars
+    //       drawProximityCircle(person.personPillarDist[index], imgWidth * 3, 550);
+    //     popMatrix();
         
-        // a float: x-coordinate of the rectangle by default
-        // b float: y-coordinate of the rectangle by default
-        // c float: width of the rectangle by default
-        // d float: height of the rectangle by default
+    //     // a float: x-coordinate of the rectangle by default
+    //     // b float: y-coordinate of the rectangle by default
+    //     // c float: width of the rectangle by default
+    //     // d float: height of the rectangle by default
 
-        pushMatrix();
-          translate(pillarPosition.x - 10, pillarPosition.y - 25, pillarPosition.z - 2);
-          fill(255, 255, 255);
-          stroke(0, 0, 0);
-          // rect(pillarPosition.x, pillarPosition.y, 200, 500);
-          rectMode(CORNER);
+    //     pushMatrix();
+    //       translate(pillarPosition.x - 10, pillarPosition.y - 25, pillarPosition.z - 2);
+    //       fill(255, 255, 255);
+    //       stroke(0, 0, 0);
+    //       // rect(pillarPosition.x, pillarPosition.y, 200, 500);
+    //       rectMode(CORNER);
 
-          rect(0, 0, 350, data_height);
-          // box(100, 200, 1);
-          fill(0, 0, 0);
-          stroke(0, 0, 0);
-        popMatrix();
-        text("Distance:" + pillarPosition.dist(person.personPosition), pillarPosition.x, pillarPosition.y + (p * 25), pillarPosition.z);
-      popMatrix();
+    //       rect(0, 0, 350, data_height);
+    //       // box(100, 200, 1);
+    //       fill(0, 0, 0);
+    //       stroke(0, 0, 0);
+    //     popMatrix();
+    //     text("Distance:" + pillarPosition.dist(person.personPosition), pillarPosition.x, pillarPosition.y + (p * 25), pillarPosition.z);
+    //   popMatrix();
 
-      
-    }
+    // }
 
     // pushMatrix();
     //   fill(0);
@@ -157,23 +161,11 @@ class Pillar{
     // popMatrix();
     
     
-    pushMatrix();
-      translate(pillarPosition.x, pillarPosition.y, pillarPosition.z);
-      rotateX(PI/2);
-      fill(220, 20);
-      //box(100, pillarHeight, 20);
-      //drawCylinder();
-      noStroke();
-      drawCylinder(tubeRes, imgWidth * 3, imgHeight * 3);
-      stroke(0);
-      strokeWeight(1);
-    popMatrix();
     fill(255);
     
     int y = 20 + (index * 30);
 
     fbo.beginDraw();
-
 
       fbo.colorMode(RGB);
 
@@ -201,13 +193,16 @@ class Pillar{
         znoise += inc;
 
 
+        println("average_distance: " + average_distance);
+
         float y_pos = map((int)average_distance, 300, 1500, imgWidth, imgHeight);
 
-        println("y_pos:" + y_pos);
+        println("y_pos: " + y_pos);
 
         float ellipse_size = map((int)average_distance, 300, 1500, imgWidth, imgWidth * 10);
 
-        println("ellipse_size" + ellipse_size);
+        println("ellipse_size: " + ellipse_size);
+        println("");
         // println("ellipse_size" + ellipse_size);
         // println("ellipse_size" + ellipse_size);
 
@@ -217,15 +212,92 @@ class Pillar{
         // c float: width of the ellipse by default
         // d float: height of the ellipse by default
 
-        fbo.ellipse(4, y_pos, (int)ellipse_size, (int)ellipse_size);
+        fbo.fill(colors[color_index], alpha);
+        int e_size = (int)ellipse_size;
+
+        fbo.ellipse(4, y_pos, e_size, e_size);
+
+        e_size = (int)(ellipse_size * scale);
+        fbo.ellipse(4, y_pos, e_size, e_size);
+
+        e_size = (int)(ellipse_size * scale);
+        fbo.ellipse(4, y_pos, e_size, e_size);
+
+        e_size = (int)(ellipse_size * scale);
+        fbo.ellipse(4, y_pos, e_size, e_size);
+
+        e_size = (int)(ellipse_size * scale);
+        fbo.ellipse(4, y_pos, e_size, e_size);
 
       popMatrix();
+
+      int peopleSize = people.size();
+      int data_height = peopleSize * 30;
+
+      for (int p = 0; p < peopleSize; p++) {
+        Person person = people.get(p);
+
+        pushMatrix();
+          fill(0);
+          translate(50, -250, 50);
+          
+          pushMatrix();
+            noFill();
+            translate(-50, 0, -50);
+            translate(pillarPosition.x, pillarPosition.y, pillarPosition.z);
+            rotateX(PI/2);
+
+            // here, the index is used as the pillar index
+            // so each Person has a array to store the distance to 
+            // one of the 5 pillars
+            drawProximityCircle(person.personPillarDist[index], imgWidth * 3, 550);
+          popMatrix();
+          
+          // a float: x-coordinate of the rectangle by default
+          // b float: y-coordinate of the rectangle by default
+          // c float: width of the rectangle by default
+          // d float: height of the rectangle by default
+
+          pushMatrix();
+            translate(pillarPosition.x - 10, pillarPosition.y - 25, pillarPosition.z - 2);
+            fill(255, 255, 255);
+            stroke(0, 0, 0);
+            // rect(pillarPosition.x, pillarPosition.y, 200, 500);
+            rectMode(CORNER);
+
+            rect(0, 0, 350, data_height);
+            // box(100, 200, 1);
+            fill(0, 0, 0);
+            stroke(0, 0, 0);
+          popMatrix();
+          text("Distance:" + pillarPosition.dist(person.personPosition), pillarPosition.x, pillarPosition.y + (p * 25), pillarPosition.z);
+        popMatrix();
+
+      }
+
     fbo.endDraw();
+
+    texturePillars();
 
     cam.beginHUD();
       image(fbo, 20 + index * (imgWidth * 3 ) , 20, imgWidth * 2, imgHeight * 2);
     cam.endHUD();
   
+  }
+
+  void texturePillars(){
+    pushMatrix();
+      translate(pillarPosition.x, pillarPosition.y, pillarPosition.z);
+      rotateX(PI/2);
+      fill(220, 20);
+      //box(100, pillarHeight, 20);
+      //drawCylinder();
+      noStroke();
+      // drawCylinder(tubeRes, imgWidth * 3, imgHeight * 3);
+      drawCylinder(tubeRes, imgWidth * 3, imgHeight * 3);
+      stroke(0);
+      strokeWeight(1);
+    popMatrix();
   }
   
   void drawProximityCircle(float _dist, float sides, float h){
@@ -238,7 +310,7 @@ class Pillar{
     for (int i = 0; i <= sides; i++) {
       float x = cos( radians( i * angle ) ) * r;
       float y = sin( radians( i * angle ) ) * r;
-      vertex( x, y, -halfHeight);
+      vertex(x, y, -halfHeight);
     }
     endShape(CLOSE);
   
@@ -257,24 +329,17 @@ class Pillar{
   
     // Texture the cylinder
     // Use img for debugging image mapping w/ a static image 
-    // texture(img);
     texture(fbo);
+    
   
     for (int i = 0; i < sides + 1; i++) {
       float x = cos( radians( i * angle ) ) * r;
       float y = sin( radians( i * angle ) ) * r;
-      // already commented out
-      //float u = fbo.width / tubeRes * i;
-      // END: already commented out
-      
-      // Use for texture mapping the shape
-      // Uncomment out when it's ready to go to be worked on like that
-      //float u = (float)fbo.width / (float)tubeRes * (float)i;
-      //vertex( x, y, halfHeight, u, 0);
-      //vertex( x, y, -halfHeight, u, fbo.height);
-      
-      vertex( x, y, halfHeight);
-      vertex( x, y, -halfHeight);
+      float u = (float)fbo.width / (float)tubeRes * (float)i;
+
+      vertex( x, y, halfHeight, u, 0);
+      vertex( x, y, -halfHeight, u, fbo.height);
+
     }
     endShape(CLOSE);
   }
