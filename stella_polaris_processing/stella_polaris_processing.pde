@@ -1,5 +1,4 @@
 import codeanticode.syphon.*;
-import controlP5.*;
 
 // https://github.com/TakahikoKawasaki/nv-websocket-client
 // https://mvnrepository.com/artifact/com.neovisionaries/nv-websocket-client/1.4
@@ -57,7 +56,6 @@ void settings() {
   _height = height;
   _width = width;
   
-  PJOGL.profile=1;    
 }
 
 void setup()
