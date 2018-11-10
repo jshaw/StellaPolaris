@@ -62,7 +62,7 @@ void settings() {
 
 void setup()
 {
-  frameRate(10);
+  frameRate(15);
   rectMode(CENTER);
   smooth(8);
   
@@ -81,11 +81,19 @@ void setup()
   // Integrate a better WebSocket library for communication and error handlging
   openWebSocket("ws://localhost:8080/stella");
   
+  //opc.setColorCorrection(2.5, 0.75, 0.75, 0.75);
+  //opc.setColorCorrection(2.5, 0.5, 0.5, 0.5);
+
+  
   // opc.ledStrip(index, count, x, y, spacing, angle, reversed)
-  opc.ledStrip(0, 60, 20, 139, 4, PI/2, false);
-  opc.ledStrip(64, 60, 25, 139, 4, PI/2, false);
-  opc.ledStrip(128, 60, 30, 139, 4, PI/2, false);
-  opc.ledStrip(192, 60, 35, 139, 4, PI/2, false);
+  //opc.ledStrip(0, 60, 22, 139, 4, PI/2, false);
+  //opc.ledStrip(64, 60, 25, 139, 4, PI/2, false);
+  //opc.ledStrip(128, 60, 30, 139, 4, PI/2, false);
+  //opc.ledStrip(192, 60, 33, 139, 4, PI/2, false);
+  opc.ledStrip(256, 60, 25, 139, 4, PI/2, false);
+  opc.ledStrip(320, 60, 22, 139, 4, PI/2, false);
+  opc.ledStrip(384, 60, 30, 139, 4, PI/2, false);
+  opc.ledStrip(444, 60, 33, 139, 4, PI/2, false);
 
   gui();
 }
