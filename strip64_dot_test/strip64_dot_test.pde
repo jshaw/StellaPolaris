@@ -10,6 +10,8 @@ void setup()
 
   // Connect to the local instance of fcserver
   opc = new OPC(this, "127.0.0.1", 7890);
+  
+  opc.setColorCorrection(2.5, 0.75, 0.75, 0.75);
 
   // Map one 64-LED strip to the center of the window
   // opc.ledStrip(index, count, x, y, spacing, angle, reversed)
@@ -17,8 +19,15 @@ void setup()
   // opc.ledStrip(0, 60, width/2, height/2, width / 70.0, 0, false);
   // opc.ledStrip(0, 60, width/2, height/2, 2, 0, false);
 
-  opc.ledStrip(0, 60, 10, 75, 2, PI/2, false);
-  opc.ledStrip(64, 60, 20, 75, 2, PI/2, false);
+  opc.ledStrip(0, 60, 50, 75, 2, PI/2, false);
+  //opc.ledStrip(64, 60, 60, 75, 2, PI/2, false);
+  opc.ledStrip(128, 60, 70, 75, 2, PI/2, false);
+  opc.ledStrip(192, 60, 80, 75, 2, PI/2, false);
+  opc.ledStrip(252, 60, 60, 75, 2, PI/2, false);
+  //opc.ledStrip(252, 60, 20, 75, 2, PI/2, false);
+  
+  
+  
 
 
 }
