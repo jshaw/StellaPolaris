@@ -51,7 +51,8 @@ int lastSeen = 0;
 int clearSeen = 30000;
 
 void settings() {
-   size(1080, 720, P3D);
+   //size(1080, 720, P3D);
+   size(720, 480, P3D);
 
   _height = height;
   _width = width;
@@ -88,10 +89,12 @@ void setup()
   //opc.ledStrip(64, 60, 25, 139, 4, PI/2, false);
   //opc.ledStrip(128, 60, 30, 139, 4, PI/2, false);
   //opc.ledStrip(192, 60, 33, 139, 4, PI/2, false);
-  opc.ledStrip(256, 60, 25, 139, 4, PI/2, false);
-  opc.ledStrip(320, 60, 22, 139, 4, PI/2, false);
-  opc.ledStrip(384, 60, 30, 139, 4, PI/2, false);
-  opc.ledStrip(444, 60, 33, 139, 4, PI/2, false);
+
+  // this is for pillar #5
+  opc.ledStrip(0, 60, 21, 139, 4, PI/2, false);
+  opc.ledStrip(320, 60, 25, 139, 4, PI/2, false);
+  opc.ledStrip(128, 60, 30, 139, 4, PI/2, false);
+  opc.ledStrip(192, 60, 34, 139, 4, PI/2, false);
 
   gui();
 }
