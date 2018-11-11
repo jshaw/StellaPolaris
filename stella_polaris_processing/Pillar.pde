@@ -23,10 +23,8 @@ class Pillar{
 
   //float inc = 0.005;
   //int density = 8;
-
+  
   float znoise = random(0,1);
-
-
   PImage image;
 
   color[] colors = {#330033, #333333, #333366, #66cc99, #663366, #993399, #336666, #003366, #6699cc, #009999};
@@ -35,7 +33,6 @@ class Pillar{
   int alpha = 40;
   float scale = 0.95;
   
-  // Pillar(int _i, Person _person, PVector _pillarPosition, int _pillarHeight){ 
   Pillar(int _i, PImage _image, ArrayList _people, PVector _pillarPosition, int _pillarHeight){ 
     index = _i;
     people = _people;
@@ -43,14 +40,11 @@ class Pillar{
     pillarHeight = _pillarHeight;
     
     textSize(28);
-    
     fbo = createGraphics(imgWidth, imgHeight);
-
     image = _image;
     
   }
     
-
   void update(ArrayList _people){
     people = _people;
 
@@ -94,8 +88,6 @@ class Pillar{
   float f_color;
   
   void draw(){
-    
-
 
     // int peopleSize = people.size();
     // int data_height = peopleSize * 30;
@@ -193,16 +185,16 @@ class Pillar{
         znoise += inc;
 
 
-        println("average_distance: " + average_distance);
+        // println("average_distance: " + average_distance);
 
         float y_pos = map((int)average_distance, 300, 1500, imgWidth, imgHeight);
 
-        println("y_pos: " + y_pos);
+        // println("y_pos: " + y_pos);
 
         float ellipse_size = map((int)average_distance, 300, 1500, imgWidth, imgWidth * 10);
 
-        println("ellipse_size: " + ellipse_size);
-        println("");
+        //println("ellipse_size: " + ellipse_size);
+        //println("");
         // println("ellipse_size" + ellipse_size);
         // println("ellipse_size" + ellipse_size);
 
@@ -250,7 +242,29 @@ class Pillar{
             // here, the index is used as the pillar index
             // so each Person has a array to store the distance to 
             // one of the 5 pillars
-            drawProximityCircle(person.personPillarDist[index], imgWidth * 3, 550);
+            
+            // 
+            // 
+            // 
+            // 
+            // 
+            // NOTE NOTE NOTE NOTE NOTE NOTE
+            // NOTE NOTE NOTE NOTE NOTE NOTE
+            // =================
+            // THIS IS THE PROXIMITY CIRCLE DAWS
+            //drawProximityCircle(person.personPillarDist[index], imgWidth * 3, 550);
+            
+            //
+            //
+            //
+            //
+            //
+            //
+            //
+            //
+            
+          
+          
           popMatrix();
           
           // a float: x-coordinate of the rectangle by default

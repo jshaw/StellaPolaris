@@ -96,7 +96,7 @@ void setup()
   opc.ledStrip(128, 60, 30, 139, 4, PI/2, false);
   opc.ledStrip(192, 60, 34, 139, 4, PI/2, false);
 
-  gui();
+  //gui();
 }
 
 // https://github.com/TakahikoKawasaki/nv-websocket-client
