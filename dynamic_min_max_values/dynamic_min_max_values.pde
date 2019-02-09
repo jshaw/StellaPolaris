@@ -11,20 +11,33 @@ float map_max = init_max;
 int imgWidth = 8;
 int imgHeight = 120;
 
-float average_distance = 0.0;
-float test_val = 0;
+int detections = 0;
+
+float current_distance = 0.0;
+
+ArrayList<Person> people;
 
 void setup(){
   size(720, 480, P3D);
   background(200);
   frameRate(1);
+  
+  people = new ArrayList<Person>();
 }
         
 void draw(){
   textSize(14);
   background(200);
   
-  float new_val = map(test_val, val_min, val_max, imgWidth, imgHeight);
+  float new_val = map(current_distance, val_min, val_max, imgWidth, imgHeight);
+  
+  // This map function with these values are causing the issue
+  //map(296.9124, 296.9124, 296.9124, 8, 120)
+  
+  if(Float.isNaN(new_val)){
+    map_max = imgWidth;
+  }
+  
   println("Mapping Test Values: " + new_val);
    
   fill(#0000ff);
@@ -34,10 +47,10 @@ void draw(){
   ellipse(new_val, 90, 20, 20);
   
   fill(50);
-  text("Avg. Val: " + average_distance, new_val, 130);
+  text("Avg. Val: " + current_distance, new_val, 130);
   text("Mapped Val: " + new_val, new_val, 150);
   
-  println("average_distance " + average_distance);
+  println("average_distance " + current_distance);
   println("val_min " + val_min + "  |  " + " map_min " + map_min);
   println("val_max " + val_max + "  |  " + " map_max " + map_max);
   
@@ -50,29 +63,77 @@ void draw(){
 
 
 void keyPressed() {
-  average_distance = random(init_max, init_min);
-    
-  test_val = average_distance;
   
-  println("average_distance: ", average_distance);
+  int deviceUID = (int)random(0, 10);
+  int rssi = (int)random(0, 500);
   
-  if(average_distance < val_min){
+  if(people.size() > 0){
+    int foundIndex = getIndexOfPeriferal(deviceUID);
+  }
+  
+  people.add(new Person(rssi, deviceUID));
+  
+  
+  current_distance = random(init_max, init_min);
+  
+  println("average_distance: ", current_distance);
+  
+  if(current_distance < val_min){
     println("AAAAAAAAA");
-    val_min = average_distance;
+    val_min = current_distance;
+    
+    if(detections < 2){
+      val_min += 2;      
+      map_min += 2;
+    }
+    
     map_min = map(val_min, val_min, val_max, imgWidth, imgHeight);
     println("map_min: ", map_min);
   } else {
     //map_min = map(test_val, val_min, val_max, imgWidth, imgHeight);
   }
   
-  if(average_distance > val_max){
+  if(current_distance > val_max){
     println("BBBBBBBB");
     //map_max = constrain(average_distance, imgWidth, imgHeight);
-    val_max = average_distance;
+    val_max = current_distance;
     
     map_max = map(val_max, val_min, val_max, imgWidth, imgHeight);
     println("map_max: ", map_max);
+    
+    if(detections < 2){
+      val_max -= 2;
+      map_max -= 2;
+    }
+    
   } else {
     //map_max = map(val_max, val_min, val_max, imgWidth, imgHeight);
   }
+  
+  if(detections < 2){
+    val_min += 2;
+    val_max -= 2;
+    
+    map_min += 2;
+    map_max -= 2;
+  
+  }
+  
+  detections++;
+}
+
+int getIndexOfPeriferal(int deviceUID) {
+
+  for(Person personObject : people)  {
+    // println("personObject: ", personObject);
+    // println("periferalName: ", periferalName);
+
+    int foundIndex = people.indexOf(personObject);
+
+    //if(int(people.get(foundIndex).deviceCount) == deviceUID){
+    //  return foundIndex;
+    //}
+
+  }
+  return -1; 
 }
