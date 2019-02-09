@@ -92,6 +92,9 @@ class Pillar{
 
   float r;
   float f_color;
+
+  float map_min = 1500;
+  float map_max = 0;
   
   void draw(){
     
@@ -195,11 +198,25 @@ class Pillar{
 
         println("average_distance: " + average_distance);
 
-        float y_pos = map((int)average_distance, 300, 1500, imgWidth, imgHeight);
+        // map_min = 1500;
+        // map_max = 0;
 
-        println("y_pos: " + y_pos);
+        if(average_distance < map_min){
+          map_min = constrain(average_distance, imgWidth, imgHeight);
+        }
 
-        float ellipse_size = map((int)average_distance, 300, 1500, imgWidth, imgWidth * 10);
+        if(average_distance > map_max){
+          map_max = constrain(average_distance, imgWidth, imgHeight);
+        }
+
+        // float y_pos = map((int)average_distance, 300, 1500, imgWidth, imgHeight);
+
+        // println("y_pos: " + y_pos);
+
+        // float ellipse_size = map((int)average_distance, 300, 1500, imgWidth, imgWidth * 10);
+
+        float y_pos = map((int)average_distance, map_min, map_max, imgWidth, imgHeight);
+        float ellipse_size = map((int)average_distance, map_min, map_max, imgWidth, imgWidth * 10);
 
         println("ellipse_size: " + ellipse_size);
         println("");

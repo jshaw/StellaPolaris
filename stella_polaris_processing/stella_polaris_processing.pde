@@ -22,7 +22,7 @@ PeasyCam cam;
 
 String blendMode[] = {"BLEND", "ADD", "SUBTRACT", "DARKEST", "LIGHTEST", 
   "DIFFERENCE", "EXCLUSION", "MULTIPLY", "SCREEN", "REPLACE"};
-int blendModeIndex = 1;
+int blendModeIndex = 0;
 
 int _width = 0;
 int _height = 0;
@@ -51,7 +51,8 @@ int lastSeen = 0;
 int clearSeen = 30000;
 
 void settings() {
-   size(1080, 720, P3D);
+   // size(1080, 720, P3D);
+   size(720, 480, P3D);
 
   _height = height;
   _width = width;
@@ -88,12 +89,21 @@ void setup()
   //opc.ledStrip(64, 60, 25, 139, 4, PI/2, false);
   //opc.ledStrip(128, 60, 30, 139, 4, PI/2, false);
   //opc.ledStrip(192, 60, 33, 139, 4, PI/2, false);
-  opc.ledStrip(256, 60, 25, 139, 4, PI/2, false);
-  opc.ledStrip(320, 60, 22, 139, 4, PI/2, false);
-  opc.ledStrip(384, 60, 30, 139, 4, PI/2, false);
-  opc.ledStrip(444, 60, 33, 139, 4, PI/2, false);
 
-  gui();
+
+
+  // for Pillar #5
+  // Currently a little funny
+  opc.ledStrip(0, 60, 21, 139, 4, PI/2, false);
+  // opc.ledStrip(256, 60, 25, 139, 4, PI/2, false);
+  opc.ledStrip(320, 60, 25, 139, 4, PI/2, false);
+  // opc.ledStrip(384, 60, 25, 139, 4, PI/2, false);
+  // opc.ledStrip(444, 60, 25, 139, 4, PI/2, false);
+  opc.ledStrip(128, 60, 30, 139, 4, PI/2, false);
+  opc.ledStrip(192, 60, 34, 139, 4, PI/2, false);
+  // opc.ledStrip(444, 60, 34, 139, 4, PI/2, false);
+
+  // gui();
 }
 
 // https://github.com/TakahikoKawasaki/nv-websocket-client
@@ -204,6 +214,8 @@ void keyPressed(){
       personMoveBackward = true;
     }
   }
+
+  generateTestReading();
 }
 
 void keyReleased(){
@@ -230,6 +242,10 @@ void mouseDragged() {
 
 void gui(){
 
+}
+
+void generateTestReading() {
+  
 }
 
 void webSocketEvent(String msg){
@@ -263,7 +279,7 @@ void webSocketEvent(String msg){
         int foundIndex = getIndexOfPeriferal(deviceCount);
 
         if(foundIndex == -1){
-          people.add(new Person(new PVector(0, 0, 0), 400, clearSeen, rssi, mfd, active, deviceUID, lastSeen, deviceCount));
+          people.add(new Person(new PVector(0, 0, 0), 10000, clearSeen, rssi, mfd, active, deviceUID, lastSeen, deviceCount));
         } else {
 
           Person tmp_person = people.get(foundIndex);

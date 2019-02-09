@@ -3,9 +3,6 @@
 class Person{
 
   PVector personPosition = new PVector();
-  
-  //float personXPosition;
-  //float personZPosition;
   int personHeight;
   float rssi;
   String mfd;
@@ -15,8 +12,7 @@ class Person{
   int lastSeen;
 
   float[] personPillarDist = new float[5];
-  
-  // Person(PVector _personPosition, int _personHeight){
+
   Person(PVector _personPosition, int _personHeight, int _clearSeen, float _rssi, String _mfd, boolean _active, String _deviceUID, int _lastSeen, int _deviceCount){
     personHeight = _personHeight;
     personPosition = _personPosition;
