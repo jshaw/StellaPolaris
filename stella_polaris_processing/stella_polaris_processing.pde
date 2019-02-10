@@ -31,9 +31,6 @@ World world;
 
 ArrayList<Person> people;
 
-
-
-
 // =========
 // =========
 // =========
@@ -72,12 +69,6 @@ float[] FoundBLEStrength = new float[10];
 // =========
 // =========
 
-
-
-
-
-
-
 // Person Values
 // ==================
 float personPositionMoveValue = 5.0;
@@ -98,8 +89,8 @@ int lastSeen = 0;
 int clearSeen = 30000;
 
 void settings() {
-   // size(1080, 720, P3D);
-   size(720, 480, P3D);
+  // size(1080, 720, P3D);
+  size(720, 480, P3D);
 
   _height = height;
   _width = width;
@@ -111,6 +102,8 @@ void setup()
   frameRate(15);
   rectMode(CENTER);
   smooth(8);
+  
+  blendMode(blendModeIndex);
   
   perspective(PI/3.0,(float)width/height,1,100000);
 
@@ -213,36 +206,15 @@ void draw() {
   // personPosition.z = person_position;
   
 
-
-  // TODO
-  // TODO
-  // TODO
-  // TODO
-  // TODO
-  // ?? SOMEHING WEIRD HS HAPPENING HERE 
-  // WITH THENUMBER OF POEPLE SHOWING!!
-  // TODO
-  // TODO
-  // TODO
-  // TODO
-  // for (int i = 0; i < people.size(); i++) {
-  //   Person person = people.get(i);
-  //   // println("i: " + i);
-  //   person.draw();
-
-  //   // if (person.isDead()) {
-  //   //   people.remove(i);
-  //   // }
-  // }
-
-  // person.update(personPosition);
-  // person.draw();
-
   world.update();
   world.draw();
 
   cam.beginHUD();
     // now draw things that you want relative to the camera's position and orientation
+    pushMatrix();    
+      fill(0);
+      rect(0, 0, 500, 80);
+    popMatrix();
   cam.endHUD();
 
 }

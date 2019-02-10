@@ -121,7 +121,8 @@ class Pillar{
         int nh = fbo.height;
         for (int ny = 0; ny < nw; ny += density) {
           for (int nx = 0; nx < nh; nx += density) {
-            float n = noise(xnoise, ynoise, znoise) * 150;
+            // float n = noise(xnoise, ynoise, znoise) * 150;
+            float n = noise(xnoise, ynoise, znoise) * 120;
             color c = image.get(4, (int)n);
             fbo.noStroke();
             fbo.fill(c);
