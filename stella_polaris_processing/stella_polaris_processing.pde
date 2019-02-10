@@ -38,10 +38,6 @@ ArrayList<Person> people;
 // =========
 // =========
 
-//float init_min = 3000.0;
-// float init_min = 700.0;
-// float init_max = 4.0;
-
 float init_min = 5000.0;
 float init_max = 0;
 
@@ -73,8 +69,6 @@ float[] FoundBLEStrength = new float[10];
 // ==================
 float personPositionMoveValue = 5.0;
 PVector personPosition = new PVector(0, 0, 0);
-//float personXPosition = 0.0;
-//float personZPosition = 300.0;
 boolean personMoveLeft = false;
 boolean personMoveRight = false;
 boolean personMoveForward = false;
@@ -107,12 +101,7 @@ void setup()
   
   perspective(PI/3.0,(float)width/height,1,100000);
 
-  // people = new ArrayList<Person>();
-  // world = new World(people);
-
-  // people = new ArrayList<Person>();
   world = new World(FoundBLEStrength);
-  
   
   cam = new PeasyCam(this, width/2, height/2 + 200, 0, 2000);
   cam.setMinimumDistance(0);
@@ -189,22 +178,7 @@ void draw() {
 
   if(wsConnected == false){
     openWebSocket("ws://localhost:8080/stella");
-  }
-  
-  // if(personMoveLeft == true){
-  //   personPosition.x -= personPositionMoveValue;
-  // } else if(personMoveRight == true) {
-  //   personPosition.x += personPositionMoveValue;
-  // } else if(personMoveForward == true) {
-  //   personPosition.z -= personPositionMoveValue;
-  // } else if(personMoveBackward == true) {
-  //   personPosition.z += personPositionMoveValue;
-  // }
-
-  
-  // This was for controlling a single person and their position
-  // personPosition.z = person_position;
-  
+  } 
 
   world.update();
   world.draw();
@@ -290,7 +264,6 @@ void generateTestReading() {
   // println("current_distance: ", current_distance);
   
   if(current_distance < val_min){
-    println("AAAAAAAAA");
     val_min = current_distance;
     
     if(detections < 2){
@@ -299,14 +272,11 @@ void generateTestReading() {
     }
     
     map_min = map(val_min, val_min, val_max, imgWidth, imgHeight);
-    println("map_min: ", map_min);
   } else {
     //map_min = map(test_val, val_min, val_max, imgWidth, imgHeight);
   }
   
   if(current_distance > val_max){
-    println("BBBBBBBB");
-    //map_max = constrain(average_distance, imgWidth, imgHeight);
     val_max = current_distance;
     
     map_max = map(val_max, val_min, val_max, imgWidth, imgHeight);
@@ -370,8 +340,6 @@ void webSocketEvent(String msg){
       
       JSONObject json = jsonArray.getJSONObject(i);
 
-      //println("json: ", json);
-
       float rssi = json.getFloat("rssi");
       //String mfd = json.getString("mfd");
       //boolean active = json.getBoolean("active");
@@ -390,7 +358,6 @@ void webSocketEvent(String msg){
       if(current_distance > 0){
       
         if(current_distance < val_min){
-          //println("AAAAAAAAA");
           val_min = current_distance;
           
           if(detections < 2){
@@ -399,7 +366,7 @@ void webSocketEvent(String msg){
           }
                    
           map_min = map(val_min, val_min, val_max, imgWidth, imgHeight);
-          println("map_min: ", map_min);
+          // println("map_min: ", map_min);
         } else {
           //map_min = map(test_val, val_min, val_max, imgWidth, imgHeight);
         }
@@ -411,7 +378,7 @@ void webSocketEvent(String msg){
           
           //println(" 222222222222222222222222 ");
           map_max = map(val_max, val_min, val_max, imgWidth, imgHeight);
-          println("map_max: ", map_max);
+          // println("map_max: ", map_max);
           
           if(detections < 2){
             val_max -= 2;

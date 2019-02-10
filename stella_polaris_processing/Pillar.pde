@@ -10,8 +10,6 @@ class Pillar{
   int tubeRes = 32;
   int imgWidth = 8;
   int imgHeight = 120;
-  //int imgWidth = 12;
-  //int imgHeight = 180;
 
   float globalDist = 0;
 
@@ -20,9 +18,6 @@ class Pillar{
 
   float inc = 0.003;
   int density = 8;
-
-  //float inc = 0.005;
-  //int density = 8;
 
   float znoise = random(0,1);
 
@@ -69,8 +64,6 @@ class Pillar{
     // int peopleSize = people.size();
     int peopleSize = people.length;
 
-    // fbo.beginDraw();
-
     println(val_min);
     println(val_max);
     //println(imgWidth);
@@ -101,8 +94,6 @@ class Pillar{
     
     fill(255);
     
-    //int y = 20 + (index * 30);
-
     // helping to convert over for updates
     average_distance = average_val;
 
@@ -185,7 +176,6 @@ class Pillar{
 
       // int peopleSize = people.size();
       int peopleSize = people.length;
-      //int data_height = peopleSize * 30;
 
       for (int i = 0; i < peopleSize; i++) {
         float new_val = map(people[i], val_min, val_max, imgWidth, imgHeight);
@@ -193,8 +183,6 @@ class Pillar{
         // println("Mapping Test Values: " + new_val);  
         fbo.fill(#ff0000);
         fbo.ellipse(4, new_val, 1, 1);
-
-        // average_val += new_val;
       }
 
     fbo.endDraw();

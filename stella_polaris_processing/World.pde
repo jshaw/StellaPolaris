@@ -11,7 +11,6 @@ class World{
   PImage image = loadImage(dataPath("norther_lights_v3_120_verticle_white_v3.png"));
   // PImage image = loadImage(dataPath("test_texture_v2.png"));
   
-  
   World(float[] _people){
     people = _people;
     
@@ -23,7 +22,6 @@ class World{
   
     int i;
     for (i = 0; i < num_pillars; i++) {
-      // println("i: " + i);
       // pillar[i] = new Pillar(i, person, pillar_config[i], 180);
       pillar[i] = new Pillar(i, image, people, pillar_config[i], 180);
     }
