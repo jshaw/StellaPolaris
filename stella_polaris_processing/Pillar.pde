@@ -26,6 +26,12 @@ class Pillar{
 
   float znoise = random(0,1);
 
+  float[] people;
+
+  float x;
+  float targetX;
+  float dx;
+  float easing = 0.05;
 
   PImage image;
 
@@ -36,7 +42,8 @@ class Pillar{
   float scale = 0.95;
   
   // Pillar(int _i, Person _person, PVector _pillarPosition, int _pillarHeight){ 
-  Pillar(int _i, PImage _image, ArrayList _people, PVector _pillarPosition, int _pillarHeight){ 
+  // Pillar(int _i, PImage _image, ArrayList _people, PVector _pillarPosition, int _pillarHeight){ 
+    Pillar(int _i, PImage _image, float[] _people, PVector _pillarPosition, int _pillarHeight){ 
     index = _i;
     people = _people;
     pillarPosition = _pillarPosition;
@@ -50,123 +57,54 @@ class Pillar{
     
   }
     
-
-  void update(ArrayList _people){
-    people = _people;
-
-    int peopleSize = people.size();
-
-    globalDist = 0;
-
-    for (int p = 0; p < peopleSize; p++) {
-      Person person = people.get(p);
-
-      globalDist += pillarPosition.dist(person.personPosition);
-
-      float dist = pillarPosition.dist(person.personPosition);
-
-      // here, the index is used as the pillar index
-      // so each Person has a array to store the distance to 
-      // one of the 5 pillars
-      person.personPillarDist[index] = dist;
-
-      average_distance = globalDist / peopleSize;
-
-      // float person_position_z = calculateDistance(rssi);
-      // person_position_z *= 100;
-
-
-      // if(deviceUID == person.deviceUID){
-        
-      //   person.personPosition.z = person_position_z;
-      //   PVector _personPosition = person.personPosition;
-
-      //   person.updateParams(_personPosition, rssi, mfd, active, deviceUID);
-      //   person.updateLastSeen(lastSeen);
-      // } else {
-      //   people.add(new Person(personPosition, 400, clearSeen, rssi, mfd, active, deviceUID, lastSeen);
-      // }
-    }
-  }
-  
-
+  float average_val;
+  float val;
+  int angle = 0;
   float r;
   float f_color;
 
-  float map_min = 1500;
-  float map_max = 0;
-  
-  void draw(){
-    
-
+  void update(float[] _people){
+    people = _people;
 
     // int peopleSize = people.size();
-    // int data_height = peopleSize * 30;
+    int peopleSize = people.length;
 
-    // for (int p = 0; p < peopleSize; p++) {
-    //   Person person = people.get(p);
+    // fbo.beginDraw();
 
-    //   pushMatrix();
-    //     fill(0);
-    //     translate(50, -250, 50);
-        
-    //     pushMatrix();
-    //       noFill();
-    //       translate(-50, 0, -50);
-    //       translate(pillarPosition.x, pillarPosition.y, pillarPosition.z);
-    //       rotateX(PI/2);
+    println(val_min);
+    println(val_max);
+    //println(imgWidth);
+    //println(imgHeight);
 
-    //       // here, the index is used as the pillar index
-    //       // so each Person has a array to store the distance to 
-    //       // one of the 5 pillars
-    //       drawProximityCircle(person.personPillarDist[index], imgWidth * 3, 550);
-    //     popMatrix();
-        
-    //     // a float: x-coordinate of the rectangle by default
-    //     // b float: y-coordinate of the rectangle by default
-    //     // c float: width of the rectangle by default
-    //     // d float: height of the rectangle by default
-
-    //     pushMatrix();
-    //       translate(pillarPosition.x - 10, pillarPosition.y - 25, pillarPosition.z - 2);
-    //       fill(255, 255, 255);
-    //       stroke(0, 0, 0);
-    //       // rect(pillarPosition.x, pillarPosition.y, 200, 500);
-    //       rectMode(CORNER);
-
-    //       rect(0, 0, 350, data_height);
-    //       // box(100, 200, 1);
-    //       fill(0, 0, 0);
-    //       stroke(0, 0, 0);
-    //     popMatrix();
-    //     text("Distance:" + pillarPosition.dist(person.personPosition), pillarPosition.x, pillarPosition.y + (p * 25), pillarPosition.z);
-    //   popMatrix();
-
-    // }
-
-    // pushMatrix();
-    //   fill(0);
-    //   translate(50, -250, 50);
-    //   // println(person.personPosition.x);
-    //   // println(person.personPosition.z);
-    //   // float dist = pillarPosition.dist(person.personPosition);
-      
-    //   pushMatrix();
-    //     noFill();
-    //     translate(-50, 0, -50);
-    //     translate(pillarPosition.x, pillarPosition.y, pillarPosition.z);
-    //     rotateX(PI/2);
-    //     // drawProximityCircle(dist, imgWidth * 3, 550);
-    //     drawProximityCircle(average_distance, imgWidth * 3, 550);
-    //   popMatrix();
-      
-    //   text("Distance to Person: \n" + pillarPosition.dist(person.personPosition), pillarPosition.x, pillarPosition.y, pillarPosition.z);
-    // popMatrix();
+    angle += 1;
+    val = cos(radians(angle)) * 20;
     
+    for (int i = 0; i < peopleSize; i++) {
+
+      // println("people[i]: ", people[i]);
+      float new_val = map(people[i], val_min, val_max, imgWidth, imgHeight);
+      average_val += new_val;
+    }
+
+    average_val = constrain( (average_val / (peopleSize)), imgWidth, (imgWidth + imgHeight) );
+
+    targetX = average_val;
+    dx = targetX - x;
+    x += dx * easing;
+
+    println("average_val: " + average_val);
+    println("==============");
+
+  }
+    
+  void draw(){   
     
     fill(255);
     
-    int y = 20 + (index * 30);
+    //int y = 20 + (index * 30);
+
+    // helping to convert over for updates
+    average_distance = average_val;
 
     fbo.beginDraw();
 
@@ -195,33 +133,16 @@ class Pillar{
         }
         znoise += inc;
 
+        // float y_pos = average_distance;
 
-        println("average_distance: " + average_distance);
-
-        // map_min = 1500;
-        // map_max = 0;
-
-        if(average_distance < map_min){
-          map_min = constrain(average_distance, imgWidth, imgHeight);
-        }
-
-        if(average_distance > map_max){
-          map_max = constrain(average_distance, imgWidth, imgHeight);
-        }
-
-        // float y_pos = map((int)average_distance, 300, 1500, imgWidth, imgHeight);
-
-        // println("y_pos: " + y_pos);
-
-        // float ellipse_size = map((int)average_distance, 300, 1500, imgWidth, imgWidth * 10);
-
-        float y_pos = map((int)average_distance, map_min, map_max, imgWidth, imgHeight);
-        float ellipse_size = map((int)average_distance, map_min, map_max, imgWidth, imgWidth * 10);
+        // this is for the animation between new points
+        float y_pos = x;
+        // float ellipse_size = map((int)average_distance, val_min, val_max, imgWidth, imgHeight);
+        float ellipse_size = map((int)average_distance, val_min, val_max, 30, 600);
 
         println("ellipse_size: " + ellipse_size);
+        // println(people);
         println("");
-        // println("ellipse_size" + ellipse_size);
-        // println("ellipse_size" + ellipse_size);
 
         // Parameters  
         // a float: x-coordinate of the ellipse
@@ -230,66 +151,49 @@ class Pillar{
         // d float: height of the ellipse by default
 
         fbo.fill(colors[color_index], alpha);
-        int e_size = (int)ellipse_size;
+
+        // to pulse the disk
+        float tmp_val = abs(val);
+        int e_size = (int)ellipse_size + (int)tmp_val; 
+
+        //println("e_size: ", e_size);
 
         fbo.ellipse(4, y_pos, e_size, e_size);
 
         e_size = (int)(ellipse_size * scale);
         fbo.ellipse(4, y_pos, e_size, e_size);
 
-        e_size = (int)(ellipse_size * scale);
-        fbo.ellipse(4, y_pos, e_size, e_size);
+        scale -= 0.1;
 
         e_size = (int)(ellipse_size * scale);
         fbo.ellipse(4, y_pos, e_size, e_size);
 
+        scale -= 0.1;
+
         e_size = (int)(ellipse_size * scale);
         fbo.ellipse(4, y_pos, e_size, e_size);
+
+        scale -= 0.1;
+
+        e_size = (int)(ellipse_size * scale);
+        fbo.ellipse(4, y_pos, e_size, e_size);
+
+        scale = 0.95;
 
       popMatrix();
 
-      int peopleSize = people.size();
-      int data_height = peopleSize * 30;
+      // int peopleSize = people.size();
+      int peopleSize = people.length;
+      //int data_height = peopleSize * 30;
 
-      for (int p = 0; p < peopleSize; p++) {
-        Person person = people.get(p);
+      for (int i = 0; i < peopleSize; i++) {
+        float new_val = map(people[i], val_min, val_max, imgWidth, imgHeight);
 
-        pushMatrix();
-          fill(0);
-          translate(50, -250, 50);
-          
-          pushMatrix();
-            noFill();
-            translate(-50, 0, -50);
-            translate(pillarPosition.x, pillarPosition.y, pillarPosition.z);
-            rotateX(PI/2);
+        // println("Mapping Test Values: " + new_val);  
+        fbo.fill(#ff0000);
+        fbo.ellipse(4, new_val, 1, 1);
 
-            // here, the index is used as the pillar index
-            // so each Person has a array to store the distance to 
-            // one of the 5 pillars
-            drawProximityCircle(person.personPillarDist[index], imgWidth * 3, 550);
-          popMatrix();
-          
-          // a float: x-coordinate of the rectangle by default
-          // b float: y-coordinate of the rectangle by default
-          // c float: width of the rectangle by default
-          // d float: height of the rectangle by default
-
-          pushMatrix();
-            translate(pillarPosition.x - 10, pillarPosition.y - 25, pillarPosition.z - 2);
-            fill(255, 255, 255);
-            stroke(0, 0, 0);
-            // rect(pillarPosition.x, pillarPosition.y, 200, 500);
-            rectMode(CORNER);
-
-            rect(0, 0, 350, data_height);
-            // box(100, 200, 1);
-            fill(0, 0, 0);
-            stroke(0, 0, 0);
-          popMatrix();
-          text("Distance:" + pillarPosition.dist(person.personPosition), pillarPosition.x, pillarPosition.y + (p * 25), pillarPosition.z);
-        popMatrix();
-
+        // average_val += new_val;
       }
 
     fbo.endDraw();

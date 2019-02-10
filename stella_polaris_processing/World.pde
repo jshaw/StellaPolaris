@@ -2,7 +2,8 @@
 
 class World{
 
-  ArrayList people;
+  // ArrayList people;
+  float[] people;
   int num_pillars = 5;
   
   Pillar[] pillar = new Pillar[5];
@@ -11,7 +12,7 @@ class World{
   // PImage image = loadImage(dataPath("test_texture_v2.png"));
   
   
-  World(ArrayList _people){
+  World(float[] _people){
     people = _people;
     
     pillar_config[0] = new PVector(0, -180, -400);
